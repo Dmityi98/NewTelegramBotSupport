@@ -3,8 +3,8 @@ using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
-using SupportBot.Features;
 using SupportBot.Options;
+using Bot.Interface;
 
 namespace SupportBot
 {
@@ -43,13 +43,13 @@ namespace SupportBot
             var scope = _serviceScope.CreateScope();
 
             var messageHender = scope.ServiceProvider.GetRequiredService<IHendler<Message>>();
+            var documentHandler = scope.ServiceProvider.GetRequiredService<IHendler<Document>>();
             var callbackHandler = scope.ServiceProvider.GetRequiredService<IHendler<CallbackQuery>>();
 
             var hendler = update switch
             {
                 { Message: { } message } => messageHender.Hendle(message, cancellationToken),
                 { CallbackQuery: { } callback } => callbackHandler.Hendle(callback, cancellationToken),
-                
                 _ => UnknownUpdateHendlerAsync(update, cancellationToken)
             };
 

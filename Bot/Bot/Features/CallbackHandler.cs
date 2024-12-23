@@ -1,6 +1,6 @@
-﻿using SupportBot.Features;
-using Telegram.Bot.Types;
+﻿using Telegram.Bot.Types;
 using Telegram.Bot;
+using Bot.Interface;
 
 namespace Bot.Features
 {
@@ -8,9 +8,11 @@ namespace Bot.Features
 
     {
         private readonly ITelegramBotClient _botClient;
-        public CallbackHandler(ITelegramBotClient botClient)
+        private readonly IService _service;
+        public CallbackHandler(ITelegramBotClient botClient, IService service)
         {
             _botClient = botClient;
+            _service = service;
         }
 
         public async Task Hendle(CallbackQuery callback, CancellationToken cancellationToken)
@@ -21,6 +23,7 @@ namespace Bot.Features
             switch (callback.Data)
             {
                 case "lesson":
+                    _service.ReadDocumentExcel(""); // заменить на filePath
                     await _botClient.SendMessage(
                         chatId: message.Chat.Id,
                         text: "Нужно присать excel файл с данными о проверке домашенего задания",

@@ -1,4 +1,5 @@
-﻿using Telegram.Bot;
+﻿using Bot.Interface;
+using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
@@ -8,15 +9,19 @@ namespace SupportBot.Features
 
     {
         private readonly ITelegramBotClient _botClient;
+
         public MessageHendler(ITelegramBotClient botClient)
         {
             _botClient = botClient;
+           
         }
 
         public async Task Hendle(Message message, CancellationToken cancellationToken)
         {
-
-            InlineKeyboardMarkup inlineKeyboard = new(new[]
+            switch (message.Text)
+            {
+                case "/start":
+                    InlineKeyboardMarkup inlineKeyboard = new(new[]
                 {
                 [
                     InlineKeyboardButton.WithCallbackData("проверенный работ", "lesson"),
@@ -32,13 +37,17 @@ namespace SupportBot.Features
                 },
             });
 
-            var textStart = "Привет, я умный помощник для работы деканата\nВыбери функцию для начала.";
+                    var textStart = "Привет, я умный помощник для работы деканата\nВыбери функцию для начала.";
 
-            await _botClient.SendMessage(
-                chatId: message.Chat.Id,
-                text: textStart,
-                replyMarkup: inlineKeyboard,
-                cancellationToken: cancellationToken);
+                    await _botClient.SendMessage(
+                        chatId: message.Chat.Id,
+                        text: textStart,
+                        replyMarkup: inlineKeyboard,
+                        cancellationToken: cancellationToken);
+                    break;
+            }
+
+            
         }
     }
 
