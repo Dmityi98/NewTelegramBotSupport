@@ -1,5 +1,4 @@
-﻿
-namespace SupportBot.Features
+﻿namespace SupportBot.Features
 {
     public interface IHendler<Type>
     {

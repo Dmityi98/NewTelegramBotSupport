@@ -3,5 +3,4 @@
 namespace SupportBot.Features
 {
     public record TelegramRequest(Update Update);
-
 }

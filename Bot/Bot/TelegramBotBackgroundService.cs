@@ -43,11 +43,13 @@ namespace SupportBot
             var scope = _serviceScope.CreateScope();
 
             var messageHender = scope.ServiceProvider.GetRequiredService<IHendler<Message>>();
+            var callbackHandler = scope.ServiceProvider.GetRequiredService<IHendler<CallbackQuery>>();
 
             var hendler = update switch
             {
                 { Message: { } message } => messageHender.Hendle(message, cancellationToken),
-                { CallbackQuery: { } callback } => CallbackQueryHendler(callback, cancellationToken),
+                { CallbackQuery: { } callback } => callbackHandler.Hendle(callback, cancellationToken),
+                
                 _ => UnknownUpdateHendlerAsync(update, cancellationToken)
             };
 
@@ -61,21 +63,6 @@ namespace SupportBot
             return Task.CompletedTask;
         }
 
-        private async Task CallbackQueryHendler(CallbackQuery callbackQuery, CancellationToken cancellationToken)
-        {
-            if (callbackQuery.Message is not { } message)
-                return;
-
-            switch (callbackQuery.Data)
-            {
-                case "lesson":
-                    await _botClient.SendMessage(
-                        chatId: message.Chat.Id,
-                        text: "Приветик, пришли файл эксель",
-                        cancellationToken: cancellationToken);
-                    break;
-            }
-        }
         Task HandErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
             switch (exception)
