@@ -7,6 +7,7 @@ using SupportBot.Options;
 using Bot.Features;
 using Bot.Interface;
 using Bot.Options;
+using Bot.Comands;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -19,12 +20,12 @@ builder.Services.AddTransient<ITelegramBotClient, TelegramBotClient>(ServiceProv
     return new TelegramBotClient(token);
 }
 );
-
-builder.Services.AddTransient<IHendler<Message>, MessageHendler>();
+builder.Services.AddSingleton<CommandHandler>();
+builder.Services.AddSingleton<ICommands, StartCommand>();
+builder.Services.AddSingleton<ICommands, HelpCommand>();
 builder.Services.AddTransient<IHendler<CallbackQuery>, CallbackHandler>();
 
 builder.Services.Configure<TelegramOptions>(builder.Configuration.GetSection(TelegramOptions.Telegram));
-builder.Services.Configure<DocumentOptions>(builder.Configuration.GetSection("FileStorage"));
 
 var host = builder.Build();
 

@@ -3,25 +3,25 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace SupportBot.Features
+namespace Bot.Comands
 {
-    public class MessageHendler : IHendler<Message>
-
+    public class StartCommand : ICommands
     {
         private readonly ITelegramBotClient _botClient;
 
-        public MessageHendler(ITelegramBotClient botClient)
+        public StartCommand(ITelegramBotClient botClient)
         {
             _botClient = botClient;
-           
+
+        }
+        public bool CanExecute(Message message)
+        {
+            return message.Text.Equals("/start", StringComparison.OrdinalIgnoreCase);
         }
 
-        public async Task Hendle(Message message, CancellationToken cancellationToken)
+        public async Task ExecuteAsync(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
         {
-            switch (message.Text)
-            {
-                case "/start":
-                    InlineKeyboardMarkup inlineKeyboard = new(new[]
+            InlineKeyboardMarkup inlineKeyboard = new(new[]
                 {
                 [
                     InlineKeyboardButton.WithCallbackData("проверенный работ", "lesson"),
@@ -37,18 +37,14 @@ namespace SupportBot.Features
                 },
             });
 
-                    var textStart = "Привет, я умный помощник для работы деканата\nВыбери функцию для начала.";
+            var textStart = "Привет, я умный помощник для работы деканата\nВыбери функцию для начала.";
 
-                    await _botClient.SendMessage(
-                        chatId: message.Chat.Id,
-                        text: textStart,
-                        replyMarkup: inlineKeyboard,
-                        cancellationToken: cancellationToken);
-                    break;
-            }
-
+            await _botClient.SendMessage(
+                chatId: message.Chat.Id,
+                text: textStart,
+                replyMarkup: inlineKeyboard,
+                cancellationToken: cancellationToken);
             
         }
     }
-
 }
