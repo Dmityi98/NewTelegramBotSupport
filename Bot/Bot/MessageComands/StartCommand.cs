@@ -1,25 +1,30 @@
-﻿using Telegram.Bot;
+﻿using Bot.Interface;
+using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace SupportBot.Features
+namespace Bot.Comands
 {
-    public class MessageHendler : IHendler<Message>
-
+    public class StartCommand : ICommandMessage
     {
         private readonly ITelegramBotClient _botClient;
-        public MessageHendler(ITelegramBotClient botClient)
+
+        public StartCommand(ITelegramBotClient botClient)
         {
             _botClient = botClient;
+
+        }
+        public bool CanExecute(Message message)
+        {
+            return message.Text.Equals("/start", StringComparison.OrdinalIgnoreCase);
         }
 
-        public async Task Hendle(Message message, CancellationToken cancellationToken)
+        public async Task ExecuteAsync(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
         {
-
             InlineKeyboardMarkup inlineKeyboard = new(new[]
                 {
                 [
-                    InlineKeyboardButton.WithCallbackData("проверенный работ", "lesson"),
+                    InlineKeyboardButton.WithCallbackData("проверенный работ", "read"),
                     InlineKeyboardButton.WithCallbackData("Выданного дз", "date2")
                      ],
                 new [] {
@@ -39,7 +44,7 @@ namespace SupportBot.Features
                 text: textStart,
                 replyMarkup: inlineKeyboard,
                 cancellationToken: cancellationToken);
+            
         }
     }
-
 }

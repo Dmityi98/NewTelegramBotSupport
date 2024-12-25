@@ -1,10 +1,12 @@
+using Bot.Comands;
+using Bot.Features;
+using Bot.Interface;
 using Microsoft.Extensions.Options;
+using SupportBot.Options;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
-using SupportBot.Features;
-using SupportBot.Options;
 
 namespace SupportBot
 {
@@ -13,11 +15,20 @@ namespace SupportBot
         private readonly ITelegramBotClient _botClient;
         private readonly IServiceScopeFactory _serviceScope;
         private readonly ILogger<TelegramBotBackgroundService> _logger;
-        public TelegramBotBackgroundService(ILogger<TelegramBotBackgroundService> logger, IOptions<TelegramOptions> telegrtamOptions, ITelegramBotClient botClient, IServiceScopeFactory serviceScope)
+        private readonly CommandMessageHandler _commandMessageHandler;
+        private readonly CommandCallbackHandler _commandCallbackHandler;
+
+        public TelegramBotBackgroundService(ILogger<TelegramBotBackgroundService> logger,
+                                            IOptions<TelegramOptions> telegrtamOptions,
+                                            ITelegramBotClient botClient,
+                                            IServiceScopeFactory serviceScope, CommandMessageHandler commandHandler,
+                                            CommandCallbackHandler commandCallbackHandler)
         {
             _logger = logger;
             _botClient = botClient;
             _serviceScope = serviceScope;
+            _commandMessageHandler = commandHandler;
+            _commandCallbackHandler = commandCallbackHandler;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -40,14 +51,11 @@ namespace SupportBot
         }
         private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
-            var scope = _serviceScope.CreateScope();
-
-            var messageHender = scope.ServiceProvider.GetRequiredService<IHendler<Message>>();
 
             var hendler = update switch
             {
-                { Message: { } message } => messageHender.Hendle(message, cancellationToken),
-                { CallbackQuery: { } callback } => CallbackQueryHendler(callback, cancellationToken),
+                { Message: { } message } => _commandMessageHandler.HandleAsync(botClient, message, cancellationToken),
+                { CallbackQuery: { } callback } => _commandCallbackHandler.HandleAsync(botClient,callback, cancellationToken),
                 _ => UnknownUpdateHendlerAsync(update, cancellationToken)
             };
 
@@ -61,21 +69,6 @@ namespace SupportBot
             return Task.CompletedTask;
         }
 
-        private async Task CallbackQueryHendler(CallbackQuery callbackQuery, CancellationToken cancellationToken)
-        {
-            if (callbackQuery.Message is not { } message)
-                return;
-
-            switch (callbackQuery.Data)
-            {
-                case "lesson":
-                    await _botClient.SendMessage(
-                        chatId: message.Chat.Id,
-                        text: "Приветик, пришли файл эксель",
-                        cancellationToken: cancellationToken);
-                    break;
-            }
-        }
         Task HandErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
             switch (exception)
