@@ -15,16 +15,20 @@ namespace SupportBot
         private readonly ITelegramBotClient _botClient;
         private readonly IServiceScopeFactory _serviceScope;
         private readonly ILogger<TelegramBotBackgroundService> _logger;
-        private readonly CommandHandler _commandHandler;
+        private readonly CommandMessageHandler _commandMessageHandler;
+        private readonly CommandCallbackHandler _commandCallbackHandler;
+
         public TelegramBotBackgroundService(ILogger<TelegramBotBackgroundService> logger,
                                             IOptions<TelegramOptions> telegrtamOptions,
                                             ITelegramBotClient botClient,
-                                            IServiceScopeFactory serviceScope, CommandHandler commandHandler)
+                                            IServiceScopeFactory serviceScope, CommandMessageHandler commandHandler,
+                                            CommandCallbackHandler commandCallbackHandler)
         {
             _logger = logger;
             _botClient = botClient;
             _serviceScope = serviceScope;
-            _commandHandler = commandHandler;
+            _commandMessageHandler = commandHandler;
+            _commandCallbackHandler = commandCallbackHandler;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -47,13 +51,11 @@ namespace SupportBot
         }
         private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
-            var scope = _serviceScope.CreateScope();
-            var callbackHandler = scope.ServiceProvider.GetRequiredService<IHendler<CallbackQuery>>();
 
             var hendler = update switch
             {
-                { Message: { } message } => _commandHandler.HandleAsync(botClient, message, cancellationToken),
-                { CallbackQuery: { } callback } => callbackHandler.Hendle(callback, cancellationToken),
+                { Message: { } message } => _commandMessageHandler.HandleAsync(botClient, message, cancellationToken),
+                { CallbackQuery: { } callback } => _commandCallbackHandler.HandleAsync(botClient,callback, cancellationToken),
                 _ => UnknownUpdateHendlerAsync(update, cancellationToken)
             };
 

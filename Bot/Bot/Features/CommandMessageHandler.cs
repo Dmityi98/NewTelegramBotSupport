@@ -5,11 +5,11 @@ using Bot.Interface;
 
 namespace Bot.Features
 {
-    public class CommandHandler
+    public class CommandMessageHandler
     {
-        private readonly IEnumerable<ICommands> _commands;
+        private readonly IEnumerable<ICommandMessage> _commands;
 
-        public CommandHandler(IEnumerable<ICommands> commands)
+        public CommandMessageHandler(IEnumerable<ICommandMessage> commands)
         {
             _commands = commands;
         }

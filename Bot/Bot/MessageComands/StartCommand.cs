@@ -5,7 +5,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Bot.Comands
 {
-    public class StartCommand : ICommands
+    public class StartCommand : ICommandMessage
     {
         private readonly ITelegramBotClient _botClient;
 
@@ -24,7 +24,7 @@ namespace Bot.Comands
             InlineKeyboardMarkup inlineKeyboard = new(new[]
                 {
                 [
-                    InlineKeyboardButton.WithCallbackData("проверенный работ", "lesson"),
+                    InlineKeyboardButton.WithCallbackData("проверенный работ", "read"),
                     InlineKeyboardButton.WithCallbackData("Выданного дз", "date2")
                      ],
                 new [] {

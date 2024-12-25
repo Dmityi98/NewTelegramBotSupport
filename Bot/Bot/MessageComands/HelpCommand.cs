@@ -4,7 +4,7 @@ using Telegram.Bot.Types;
 
 namespace Bot.Comands
 {
-    public class HelpCommand : ICommands
+    public class HelpCommand : ICommandMessage
     {
         private readonly ITelegramBotClient _botClient;
 
