@@ -1,3 +1,4 @@
+using Bot.CalbackCommand;
 using Bot.Comands;
 using Bot.Features;
 using Bot.Interface;
@@ -14,6 +15,7 @@ namespace SupportBot
     {
         private readonly ITelegramBotClient _botClient;
         private readonly IServiceScopeFactory _serviceScope;
+        private static string _downloadPath = "downloaded_files";
         private readonly ILogger<TelegramBotBackgroundService> _logger;
         private readonly CommandMessageHandler _commandMessageHandler;
         private readonly CommandCallbackHandler _commandCallbackHandler;
@@ -21,7 +23,8 @@ namespace SupportBot
         public TelegramBotBackgroundService(ILogger<TelegramBotBackgroundService> logger,
                                             IOptions<TelegramOptions> telegrtamOptions,
                                             ITelegramBotClient botClient,
-                                            IServiceScopeFactory serviceScope, CommandMessageHandler commandHandler,
+                                            IServiceScopeFactory serviceScope,
+                                            CommandMessageHandler commandHandler,
                                             CommandCallbackHandler commandCallbackHandler)
         {
             _logger = logger;
@@ -54,6 +57,7 @@ namespace SupportBot
 
             var hendler = update switch
             {
+                { Message: { Document: { } document } message } => DownloadFileAsync(botClient, message, cancellationToken), // Исправлено
                 { Message: { } message } => _commandMessageHandler.HandleAsync(botClient, message, cancellationToken),
                 { CallbackQuery: { } callback } => _commandCallbackHandler.HandleAsync(botClient,callback, cancellationToken),
                 _ => UnknownUpdateHendlerAsync(update, cancellationToken)
@@ -61,6 +65,31 @@ namespace SupportBot
 
             await hendler;
 
+        }
+
+        private async Task DownloadFileAsync(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
+        {
+            if (message.Document is not { } document) return;
+            var chatId = message.Chat.Id;
+
+            try
+            {
+                var fileInfo = await botClient.GetFileAsync(document.FileId, cancellationToken); 
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), _downloadPath, document.FileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await botClient.DownloadFile(fileInfo.FilePath, fileStream, cancellationToken); 
+                }
+
+                await botClient.SendMessage(chatId,
+                    text: "Файл успешно скачен", cancellationToken: cancellationToken); 
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error when download file");
+                await botClient.SendMessage(chatId, $"Ошибка при скачивании файла: {ex.Message}", cancellationToken: cancellationToken); // Исправлено
+            }
         }
 
         private Task UnknownUpdateHendlerAsync(Update update, CancellationToken cancellationToken)

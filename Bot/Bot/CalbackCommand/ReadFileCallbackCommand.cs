@@ -26,8 +26,7 @@ namespace Bot.CalbackCommand
             await _botClient.SendMessage(
                 chatId: message.Chat.Id,
                 text: "Нужно присать excel файл с данными о проверке домашенего задания",
-                cancellationToken: cancellationToken);
-        
+                cancellationToken: cancellationToken);        
         }
     }
 }
