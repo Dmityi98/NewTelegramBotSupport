@@ -6,6 +6,9 @@ using Bot.Features;
 using Bot.Interface;
 using Bot.Comands;
 using Bot.CalbackCommand;
+using Bot.Logic.Builder;
+using Bot.Services;
+
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -23,6 +26,8 @@ builder.Services.AddSingleton<CommandCallbackHandler>();
 builder.Services.AddSingleton<ICommandMessage, StartCommand>();
 builder.Services.AddSingleton<ICommandMessage, HelpCommand>();
 builder.Services.AddSingleton<ICallbackCommand, ReadFileCallbackCommand>();
+builder.Services.AddSingleton<FileStorageService>();
+builder.Services.AddScoped<Bot.Logic.Builder.ReportBuilder>();
 
 builder.Services.Configure<TelegramOptions>(builder.Configuration.GetSection(TelegramOptions.Telegram));
 
