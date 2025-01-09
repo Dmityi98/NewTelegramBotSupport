@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot", "Bot\Bot.csproj", "{7093C2D0-B6F4-44E2-B7B5-9EBFB61D182B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bot", "Bot\Bot.csproj", "{7093C2D0-B6F4-44E2-B7B5-9EBFB61D182B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot.Logic", "Bot.Logic\Bot.Logic.csproj", "{C373E4D7-5E0F-4415-89FE-609C8939FE1F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot.Core", "Bot.Core\Bot.Core.csproj", "{CA0B0FD4-0B3E-462F-B8CB-540D8D80CCA8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{7093C2D0-B6F4-44E2-B7B5-9EBFB61D182B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7093C2D0-B6F4-44E2-B7B5-9EBFB61D182B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7093C2D0-B6F4-44E2-B7B5-9EBFB61D182B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C373E4D7-5E0F-4415-89FE-609C8939FE1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C373E4D7-5E0F-4415-89FE-609C8939FE1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C373E4D7-5E0F-4415-89FE-609C8939FE1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C373E4D7-5E0F-4415-89FE-609C8939FE1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA0B0FD4-0B3E-462F-B8CB-540D8D80CCA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA0B0FD4-0B3E-462F-B8CB-540D8D80CCA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA0B0FD4-0B3E-462F-B8CB-540D8D80CCA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA0B0FD4-0B3E-462F-B8CB-540D8D80CCA8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
