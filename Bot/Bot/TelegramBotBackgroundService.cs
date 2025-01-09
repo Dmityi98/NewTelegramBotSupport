@@ -72,7 +72,6 @@ namespace SupportBot
             };
 
             await hendler;
-
         }
 
         public async Task HandleDocumentAsync(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)

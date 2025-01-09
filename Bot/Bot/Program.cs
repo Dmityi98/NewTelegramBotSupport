@@ -27,7 +27,8 @@ builder.Services.AddSingleton<ICommandMessage, StartCommand>();
 builder.Services.AddSingleton<ICommandMessage, HelpCommand>();
 builder.Services.AddSingleton<ICallbackCommand, ReadFileCallbackCommand>();
 builder.Services.AddSingleton<FileStorageService>();
-builder.Services.AddScoped<Bot.Logic.Builder.ReportBuilder>();
+
+builder.Services.AddScoped<Bot.Logic.Builder.WorkFileBuilder>();
 
 builder.Services.Configure<TelegramOptions>(builder.Configuration.GetSection(TelegramOptions.Telegram));
 

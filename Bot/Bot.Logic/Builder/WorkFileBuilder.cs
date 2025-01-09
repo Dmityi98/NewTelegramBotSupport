@@ -8,11 +8,19 @@ namespace Bot.Logic.Builder
 {
     public class WorkFileBuilder
     {
-        private ReportBuilderInterface reportBuilderInterface;
+        private ReportBuilder _reportBuilder = new ReportBuilder();
 
-        public void SetBuilder(ReportBuilderInterface reportBuilderInterface)
+        public void SetBuilder(ReportBuilder builder)
         {
-            this.reportBuilderInterface = reportBuilderInterface;
+            _reportBuilder = builder;
+        }
+
+        public  string CookExel1(string filePath)
+        {
+            _reportBuilder.FileExcelRead(filePath);
+            var value = _reportBuilder.PercentageOfHomeworkCompleted();
+            string report = string.Join("\n", value.Select(n => n.NameTeacher));
+            return report;
         }
     }
 }

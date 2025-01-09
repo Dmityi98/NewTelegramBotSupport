@@ -4,15 +4,13 @@ using System.Collections.Generic;
 
 namespace Bot.Logic.Builder
 {
-    public class ReportBuilder : ReportBuilderInterface
+    public class ReportBuilder : IReportBuilderInterface
     {
-        private Report _report;
         public TeacherList TList = new TeacherList();
-
-        public ReportBuilder()
-        {
-            _report = new Report();
-        }
+        /// <summary>
+        /// Чтение файла
+        /// </summary>
+        /// <param name="filePath"></param>
         public void FileExcelRead(string filePath)
         {
             Aspose.Cells.Workbook wb = new Aspose.Cells.Workbook(filePath);
@@ -51,14 +49,24 @@ namespace Bot.Logic.Builder
             }
         }
 
-        public void PercentageOfHomeworkCompleted()
+        // Возвращает  список преподователей у которых проверка дз меньше 75%
+        public List<Teacher> PercentageOfHomeworkCompleted() 
         {
-            
+            var list = new List<Teacher>();
+            foreach(var item in TList.TeachersList)
+            {
+                if ((item.ValueTeacher[2] == 0) || (item.ValueTeacher[3]) == 0)
+                {
+                    list.Add(item);
+                }
+                else if (((item.ValueTeacher[3] / item.ValueTeacher[2]) * 100) <= 75)
+                {
+                    list.Add(item);
+                }
+            }
+            return list;  
         }
-        public List<Teacher> GetTeacherList()
-        {
-            return TList.TeachersList;
-        }
+        
 
         
     }

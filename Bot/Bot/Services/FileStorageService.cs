@@ -15,7 +15,7 @@
             if (_filePaths.ContainsKey(chatId))
             {
                 _logger.LogWarning("File path already exists for chatId: {chatId}, new path: {filePath}", chatId, filePath);
-                _filePaths[chatId] = filePath; // Заменяем старый путь новым
+                _filePaths[chatId] = filePath;
                 return;
             }
             _filePaths.Add(chatId, filePath);

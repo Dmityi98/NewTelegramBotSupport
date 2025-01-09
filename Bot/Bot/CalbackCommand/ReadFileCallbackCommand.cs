@@ -1,8 +1,6 @@
-﻿using Bot.Core.Models;
-using Bot.Interface;
+﻿using Bot.Interface;
 using Bot.Logic.Builder;
 using Bot.Services;
-using System.Reflection.Metadata;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
@@ -11,16 +9,14 @@ namespace Bot.CalbackCommand
     public class ReadFileCallbackCommand : ICallbackCommand
     {
         private readonly ITelegramBotClient _botClient;
-        private readonly ReportBuilder _reportBuilder = new ReportBuilder();
+        private readonly WorkFileBuilder _reportBuilder = new WorkFileBuilder();
         public  Dictionary<long, string> _filePaths = new();
         private readonly FileStorageService _fileStorage;
 
-
-
-        public ReadFileCallbackCommand(ITelegramBotClient botClient, ReportBuilder reportBuilder, FileStorageService fileStorage)
+        public ReadFileCallbackCommand(ITelegramBotClient botClient, WorkFileBuilder workFileBuilder, FileStorageService fileStorage)
         {
             _botClient = botClient;
-            _reportBuilder = reportBuilder;
+            _reportBuilder = workFileBuilder;
             _fileStorage = fileStorage;
         }
         public bool CanExecute(CallbackQuery callback)
@@ -41,14 +37,13 @@ namespace Bot.CalbackCommand
             
             if (filePath is not null)
             {
-                _reportBuilder.FileExcelRead(filePath);
-                var tlist = _reportBuilder.GetTeacherList();
-                string NameTeachersStr = string.Join("\n", tlist.Select(n => n.NameTeacher));
+                var value = _reportBuilder.CookExel1(filePath);
 
                 await botClient.SendMessage(
                     chatId: message.Chat.Id,
-                    text: NameTeachersStr,
+                    text: $"У данных преподователей проверка дз меньше 75% за этот месяц\n{value}",
                     cancellationToken: cancellationToken);
+                System.IO.File.Delete(filePath);
             }
             else
             {
