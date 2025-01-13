@@ -3,6 +3,7 @@ using Bot.Logic.Builder;
 using Bot.Services;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Bot.CalbackCommand
 {
@@ -29,29 +30,16 @@ namespace Bot.CalbackCommand
             if (callback.Message is not { } message)
                 return;
 
+            InlineKeyboardMarkup inlineKeyboard = new(
+                InlineKeyboardButton.WithCallbackData("За месяц", "mounth"),
+                InlineKeyboardButton.WithCallbackData("За неделю", "week")
+                
+            );
             await botClient.SendMessage(
                 chatId: message.Chat.Id,
-                text: "Идёт обработка файла и формирование отчета...",
+                text: "Выберите кнопку",
+                replyMarkup: inlineKeyboard,
                 cancellationToken: cancellationToken);
-            var filePath = _fileStorage.GetFilePath(message.Chat.Id);
-            
-            if (filePath is not null)
-            {
-                var value = _reportBuilder.CookExel1(filePath);
-
-                await botClient.SendMessage(
-                    chatId: message.Chat.Id,
-                    text: $"У данных преподователей проверка дз меньше 75% за этот месяц\n{value}",
-                    cancellationToken: cancellationToken);
-                System.IO.File.Delete(filePath);
-            }
-            else
-            {
-                await botClient.SendMessage(
-                    chatId: message.Chat.Id,
-                    text: "Файл не найден.",
-                    cancellationToken: cancellationToken);
-            }
         }
     }
 }

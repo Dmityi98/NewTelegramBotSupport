@@ -11,6 +11,7 @@ namespace Bot.Logic.Builder
         /// Чтение файла
         /// </summary>
         /// <param name="filePath"></param>
+        /// 
         public void FileExcelRead(string filePath)
         {
             Aspose.Cells.Workbook wb = new Aspose.Cells.Workbook(filePath);
@@ -66,8 +67,22 @@ namespace Bot.Logic.Builder
             }   
             return list;  
         }
-        
-
-        
+        public List<Teacher> PercentageOfHomeworkCompleted2()
+        {
+            var list = new List<Teacher>();
+            foreach (var item in TList.TeachersList)
+            {
+                if ((item.ValueTeacher[7] == 0) || (item.ValueTeacher[8]) == 0)
+                {
+                    list.Add(item);
+                }
+                else if (((item.ValueTeacher[8] / item.ValueTeacher[7]) * 100) <= 75)
+                {
+                    list.Add(item);
+                }
+            }
+            return list;
+        }
+      
     }
 }
