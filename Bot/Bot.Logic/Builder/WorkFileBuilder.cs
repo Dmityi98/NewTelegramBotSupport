@@ -20,7 +20,7 @@ namespace Bot.Logic.Builder
             _reportBuilder.FileExcelRead(filePath);
             var value = _reportBuilder.PercentageOfHomeworkCompleted();
             string report = string.Join("\n", value.Select(n => n.NameTeacher));
-            return report;
+            return report; // Сделать обнуление строки 
         }
     }
 }

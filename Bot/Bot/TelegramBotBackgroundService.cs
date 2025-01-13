@@ -44,6 +44,7 @@ namespace SupportBot
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            
             ReceiverOptions receiverOptions = new()
             {
                 AllowedUpdates = []
@@ -76,6 +77,7 @@ namespace SupportBot
 
         public async Task HandleDocumentAsync(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
         {
+            Directory.CreateDirectory(_downloadPath);
             if (message.Document is null)
                 return;
 

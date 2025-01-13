@@ -61,9 +61,9 @@ namespace Bot.Logic.Builder
                 }
                 else if (((item.ValueTeacher[3] / item.ValueTeacher[2]) * 100) <= 75)
                 {
-                    list.Add(item);
+                    list.Add (item);
                 }
-            }
+            }   
             return list;  
         }
         
