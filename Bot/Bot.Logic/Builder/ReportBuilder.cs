@@ -1,17 +1,16 @@
 ﻿using Aspose.Cells;
-using Bot.Core.Models;
+using Bot.Core.Models.Task1;
+using Bot.Core.Models.Task3;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Bot.Logic.Builder
 {
     public class ReportBuilder : IReportBuilderInterface
     {
         public TeacherList TList = new TeacherList();
-        /// <summary>
-        /// Чтение файла
-        /// </summary>
-        /// <param name="filePath"></param>
-        /// 
+
+        public TopicList LessonTopics = new TopicList();
         public void FileExcelRead(string filePath)
         {
             Aspose.Cells.Workbook wb = new Aspose.Cells.Workbook(filePath);
@@ -39,13 +38,41 @@ namespace Bot.Logic.Builder
                     // Перебрать каждый столбец в выбранной строке
                     for (int j = 1; j < cols; j++)
                     {
-                        teather.ValueTeacher.Add(Convert.ToInt32(worksheet.Cells[i, j + 1].Value));
                         if (worksheet.Cells[i, j + 1].Value == null)
                         {
                             break;
                         }
+                        teather.ValueTeacher.Add(Convert.ToInt32(worksheet.Cells[i, j + 1].Value));
                     }
                     TList.TeachersList.Add(teather);
+                }
+            }
+        }
+        public void FileExcelReadTopic(string filePath)
+        {
+            Aspose.Cells.Workbook wb = new Aspose.Cells.Workbook(filePath);
+
+            // Получить все рабочие листы
+            WorksheetCollection collection = wb.Worksheets;
+
+            // Перебрать все рабочие листы
+            for (int worksheetIndex = 0; worksheetIndex < collection.Count; worksheetIndex++)
+            {
+
+                // Получить рабочий лист, используя его индекс
+                Aspose.Cells.Worksheet worksheet = collection[worksheetIndex];
+
+                // Получить количество строк и столбцов
+                int rows = worksheet.Cells.MaxDataRow;
+                int cols = worksheet.Cells.MaxDataColumn;
+
+                for (int i = 2; i < rows; i++)
+                {
+                    var teacherTopic = new LessonTopic();
+                    teacherTopic.nameTeacher = worksheet.Cells[i, 4].Value.ToString();
+
+                    teacherTopic.Topic = Convert.ToString(worksheet.Cells[i, 5].Value);
+                    LessonTopics.LessonTopic.Add(teacherTopic);
                 }
             }
         }
@@ -84,5 +111,20 @@ namespace Bot.Logic.Builder
             return list;
         }
       
+        public List<LessonTopic> ReturnNameTopic()
+        {
+            var list = new List<LessonTopic>();
+            string wordToFind = @"Урок №\d+\ Тема:";
+            // Уточнить момент с Тема: Урок№
+
+            foreach (var str in LessonTopics.LessonTopic)
+            {
+                if (!Regex.IsMatch(str.Topic, wordToFind, RegexOptions.IgnoreCase))
+                {
+                    list.Add(str);
+                }
+            }
+            return list;
+        }
     }
 }

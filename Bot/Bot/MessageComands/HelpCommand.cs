@@ -21,11 +21,11 @@ namespace Bot.Comands
         public async Task ExecuteAsync(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
         {
 
-            var textStart = "Это сообщение отправлено на команду /help";
+            var textHelp = "Это сообщение отправлено на команду /help";
 
             await _botClient.SendMessage(
                 chatId: message.Chat.Id,
-                text: textStart,
+                text: textHelp,
                 cancellationToken: cancellationToken);
         }
     }

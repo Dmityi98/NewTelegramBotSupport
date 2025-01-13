@@ -21,7 +21,13 @@ namespace Bot.Comands
 
         public async Task ExecuteAsync(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
         {
-         // Сделать меню при старте ы   
+            var textStart = "Приветствую вас в телеграмм боте от Academy TOP" +
+                "\nЧтобы начать работу пришлите файл и выберите функцию по обратотке Exel файла";
+
+            await _botClient.SendMessage(
+                   chatId: message.Chat.Id,
+                   text: textStart,
+                   cancellationToken: cancellationToken);
         }
     }
 }

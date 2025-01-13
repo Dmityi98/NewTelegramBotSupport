@@ -28,6 +28,7 @@ builder.Services.AddSingleton<ICommandMessage, HelpCommand>();
 builder.Services.AddSingleton<ICallbackCommand, ReadFileCallbackCommand>();
 builder.Services.AddSingleton<ICallbackCommand, WeekCallbackCommand>();
 builder.Services.AddSingleton<ICallbackCommand, MonthCallbackCommand>();
+builder.Services.AddSingleton<ICallbackCommand, TopicCallbackCommand>();
 builder.Services.AddSingleton<FileStorageService>();
 
 builder.Services.AddScoped<Bot.Logic.Builder.WorkFileBuilder>();

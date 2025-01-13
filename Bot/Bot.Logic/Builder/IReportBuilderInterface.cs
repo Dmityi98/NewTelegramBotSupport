@@ -1,4 +1,4 @@
-﻿using Bot.Core.Models;
+﻿using Bot.Core.Models.Task1;
 
 namespace Bot.Logic.Builder
 {

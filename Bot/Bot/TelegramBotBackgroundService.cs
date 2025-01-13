@@ -71,7 +71,6 @@ namespace SupportBot
                 { CallbackQuery: { } callback } => _commandCallbackHandler.HandleAsync(botClient,callback, cancellationToken),
                 _ => UnknownUpdateHendlerAsync(update, cancellationToken)
             };
-
             await hendler;
         }
 
@@ -104,7 +103,7 @@ namespace SupportBot
                     InlineKeyboardButton.WithCallbackData("Выданного дз", "date2")
                      ],
                 new [] {
-                    InlineKeyboardButton.WithCallbackData("Данные по уроку", "date3"),
+                    InlineKeyboardButton.WithCallbackData("Данные по уроку", "topic"),
                     InlineKeyboardButton.WithCallbackData("Посещаимость", "date4"),
                 },
                  new [] {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bot.Core.Models
+namespace Bot.Core.Models.Task1
 {
     public class Teacher
     {
