@@ -11,7 +11,7 @@ namespace Bot.Logic.Builder
         public TeacherList TList = new TeacherList();
 
         public TopicList LessonTopics = new TopicList();
-        public void FileExcelRead(string filePath)
+        async public void FileExcelRead(string filePath)
         {
             Aspose.Cells.Workbook wb = new Aspose.Cells.Workbook(filePath);
 
@@ -48,7 +48,7 @@ namespace Bot.Logic.Builder
                 }
             }
         }
-        public void FileExcelReadTopic(string filePath)
+        async public void FileExcelReadTopic(string filePath)
         {
             Aspose.Cells.Workbook wb = new Aspose.Cells.Workbook(filePath);
 
@@ -76,9 +76,7 @@ namespace Bot.Logic.Builder
                 }
             }
         }
-
-        // Возвращает  список преподователей у которых проверка дз меньше 75%
-        public List<Teacher> PercentageOfHomeworkCompleted() 
+        public List<Teacher> PercentageOfHomeworkCompletedMonth() 
         {
             var list = new List<Teacher>();
             foreach(var item in TList.TeachersList)
@@ -94,7 +92,7 @@ namespace Bot.Logic.Builder
             }   
             return list;  
         }
-        public List<Teacher> PercentageOfHomeworkCompleted2()
+        public List<Teacher> PercentageOfHomeworkCompletedWeek()
         {
             var list = new List<Teacher>();
             foreach (var item in TList.TeachersList)
@@ -110,12 +108,10 @@ namespace Bot.Logic.Builder
             }
             return list;
         }
-      
         public List<LessonTopic> ReturnNameTopic()
         {
             var list = new List<LessonTopic>();
             string wordToFind = @"Урок №\d+\ Тема:";
-            // Уточнить момент с Тема: Урок№
 
             foreach (var str in LessonTopics.LessonTopic)
             {
@@ -125,6 +121,11 @@ namespace Bot.Logic.Builder
                 }
             }
             return list;
+        }
+        public void ClearDataModels()
+        {
+            TList.TeachersList.Clear();
+            LessonTopics.LessonTopic.Clear();   
         }
     }
 }

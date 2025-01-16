@@ -14,28 +14,28 @@ namespace Bot.Logic.Builder
         {
             _reportBuilder = builder;
         }
-
-        public  string CookExel1(string filePath)
+        public string ReportErrorMonth(string filePath)
         {
-            
             _reportBuilder.FileExcelRead(filePath);
-            var value = _reportBuilder.PercentageOfHomeworkCompleted();
+            var value = _reportBuilder.PercentageOfHomeworkCompletedMonth();
             var report = string.Join("\n", value.Select(n => n.NameTeacher));
-            return report; // Сделать обнуление строки 
+            _reportBuilder.ClearDataModels();
+            return report;
         }
-        public string CookExel2(string filePath)
+        public string ReportErrorWeek(string filePath)
         {
             _reportBuilder.FileExcelRead(filePath);
-            var value = _reportBuilder.PercentageOfHomeworkCompleted2();
+            var value = _reportBuilder.PercentageOfHomeworkCompletedWeek();
+            _reportBuilder.ClearDataModels();
             var report = string.Join("\n", value.Select(n => n.NameTeacher));
             return report;
         }
 
-        public string CookExel3(string filePath)
+        public string ReportErrorTopic(string filePath)
         {
             _reportBuilder.FileExcelReadTopic(filePath);
             var value = _reportBuilder.ReturnNameTopic();
-            var report = string.Join("\n", value.Select(n => n.nameTeacher).Distinct());
+            var report =  string.Join("\n", value.Select(n => n.nameTeacher).Distinct());
             return report;
         }
     }

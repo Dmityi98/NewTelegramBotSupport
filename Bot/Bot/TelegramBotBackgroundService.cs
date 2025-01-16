@@ -82,7 +82,6 @@ namespace SupportBot
 
             var chatId = message.Chat.Id;
 
-
             var fileInfo = await botClient.GetFile(message.Document.FileId, cancellationToken);
             var filePath = Path.Combine(_downloadPath, message.Document.FileName);
             
@@ -94,21 +93,19 @@ namespace SupportBot
                   text: "Файл успешно скачен", cancellationToken: cancellationToken);
 
             _fileStorage.AddFilePath(chatId, filePath);
-
-
             InlineKeyboardMarkup inlineKeyboard = new(new[]
             {
                 [
-                    InlineKeyboardButton.WithCallbackData("проверенный работ", "read"),
-                    InlineKeyboardButton.WithCallbackData("Выданного дз", "date2")
+                    InlineKeyboardButton.WithCallbackData("Данные\nо проверенных работ", "read"),
+                    InlineKeyboardButton.WithCallbackData("Данные по уроку", "topic")
                      ],
                 new [] {
-                    InlineKeyboardButton.WithCallbackData("Данные по уроку", "topic"),
-                    InlineKeyboardButton.WithCallbackData("Посещаимость", "date4"),
+                    InlineKeyboardButton.WithCallbackData("Выданного дз", "date2"),
+                    InlineKeyboardButton.WithCallbackData("Посещаемости", "date4"),
                 },
                  new [] {
-                    InlineKeyboardButton.WithCallbackData("Отчет по студентам", "date5"),
-                    InlineKeyboardButton.WithCallbackData("Выполнение дз", "date6")
+                    InlineKeyboardButton.WithCallbackData("Отчёт по студентам", "date5"),
+                    InlineKeyboardButton.WithCallbackData("Выполнение дз студентами", "date6")
                 },
             });
             var textStart = "Привет, я умный помощник для работы деканата\nВыбери функцию для начала.";

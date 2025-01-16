@@ -22,7 +22,8 @@ namespace Bot.Comands
         public async Task ExecuteAsync(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
         {
             var textStart = "Приветствую вас в телеграмм боте от Academy TOP" +
-                "\nЧтобы начать работу пришлите файл и выберите функцию по обратотке Exel файла";
+                "\nЧтобы начать работу пришлите файл и выберите функцию по обратотке Exel файла\n" +
+                "Или вы можете написать команду /help для получение более делальной информации по функциям";
 
             await _botClient.SendMessage(
                    chatId: message.Chat.Id,

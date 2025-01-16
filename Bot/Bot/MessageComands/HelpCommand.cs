@@ -21,7 +21,10 @@ namespace Bot.Comands
         public async Task ExecuteAsync(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
         {
 
-            var textHelp = "Это сообщение отправлено на команду /help";
+            var textHelp = "Для начала работы вам нужно прислать файл Excel:\n" +
+                "Действия:\n1) Когда вы пришлёте файл Excel вам предстоит выбрать функцию для работы с файлом" +
+                "(тут ошибаться нельзя, иначе вы получите неправильный отчёт)\n" +
+                "2)Дождаться обработки файла и получить правильную информацию от бота\nХорошего дня!";
 
             await _botClient.SendMessage(
                 chatId: message.Chat.Id,

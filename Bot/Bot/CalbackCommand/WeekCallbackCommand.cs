@@ -37,13 +37,18 @@ namespace Bot.CalbackCommand
 
             if (filePath is not null)
             {
-                var report = _reportBuilder.CookExel2(filePath);
+                var report = _reportBuilder.ReportErrorWeek(filePath);
 
                 await botClient.SendMessage(
                     chatId: message.Chat.Id,
-                    text: $"преподователей проверка дз меньше 75% за этот месяц\n{report}",
+                    text: $"преподователей проверка дз меньше 75% за этот неделю \n{report}",
                     cancellationToken: cancellationToken);
+
                 
+                await botClient.SendMessage(
+                    chatId: message.Chat.Id,
+                    text: $"Пришлите файл ещё раз файл для начала новой работы",
+                    cancellationToken: cancellationToken);
             }
             else
             {

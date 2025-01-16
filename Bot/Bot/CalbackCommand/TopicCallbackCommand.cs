@@ -23,7 +23,6 @@ namespace Bot.CalbackCommand
         {
             return callback.Data.Equals("topic", StringComparison.OrdinalIgnoreCase);
         }
-
         public async Task ExecuteAsync(ITelegramBotClient botClient, CallbackQuery callback, CancellationToken cancellationToken)
         {
             if (callback.Message is not { } message)
@@ -37,14 +36,17 @@ namespace Bot.CalbackCommand
 
             if (filePath is not null)
             {
-                var report = _reportBuilder.CookExel3(filePath);
+                var report = _reportBuilder.ReportErrorTopic(filePath);
 
                 await botClient.SendMessage(
                     chatId: message.Chat.Id,
-                    text: $"У данных преподователей проверка дз меньше 75% за этот месяц\n{report}\n" +
-                    $"Пришлите файл ещё раз файл для начала новой работы",
+                    text: $"У данных преподователей проверка дз меньше 75% за этот месяц\n{report}\n",
                     cancellationToken: cancellationToken);
 
+                await botClient.SendMessage(
+                    chatId: message.Chat.Id,
+                    text: $"Пришлите файл ещё раз файл для начала новой работы",
+                    cancellationToken: cancellationToken);
             }
             else
             {
