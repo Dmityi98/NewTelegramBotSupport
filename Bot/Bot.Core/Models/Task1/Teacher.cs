@@ -9,6 +9,6 @@ namespace Bot.Core.Models.Task1
     public class Teacher
     {
         public string NameTeacher { get; set; } = string.Empty;
-        public List<int> ValueTeacher { get; set; } = new List<int>();
+        public List<double> ValueTeacher { get; set; } = new List<double>();
     }
 }

@@ -30,11 +30,12 @@ namespace Bot.Logic.Builder
                 int cols = worksheet.Cells.MaxDataColumn;
 
                 // Цикл по строкам
-                for (int i = 2; i < rows; i++)
+                for (int i = 2; i < rows +1; i++)
                 {
                     var teather = new Teacher();
                     teather.ValueTeacher.Clear();
                     teather.NameTeacher = worksheet.Cells[i, 1].Value.ToString();
+                    Console.WriteLine(teather.NameTeacher);
                     // Перебрать каждый столбец в выбранной строке
                     for (int j = 1; j < cols; j++)
                     {
@@ -42,7 +43,7 @@ namespace Bot.Logic.Builder
                         {
                             break;
                         }
-                        teather.ValueTeacher.Add(Convert.ToInt32(worksheet.Cells[i, j + 1].Value));
+                        teather.ValueTeacher.Add(Convert.ToDouble(worksheet.Cells[i, j + 1].Value));
                     }
                     TList.TeachersList.Add(teather);
                 }
@@ -87,10 +88,29 @@ namespace Bot.Logic.Builder
                 }
                 else if (((item.ValueTeacher[3] / item.ValueTeacher[2]) * 100) <= 75)
                 {
-                    list.Add (item);
+                    list.Add(item);
                 }
             }   
             return list;  
+        }
+
+        public List<Teacher> PercentageOfHomeworkCompletedMonth2()
+        {
+            var list = new List<Teacher>();
+            foreach (var item in TList.TeachersList)
+            {
+                if ((item.ValueTeacher[1] == 0) || (item.ValueTeacher[4]) == 0)
+                {
+                    list.Add(item);
+                }
+                else if (((item.ValueTeacher[1] / item.ValueTeacher[4]) * 100) <= 70)
+                {
+                    
+                    list.Add(item);
+                }
+                
+            }
+            return list;
         }
         public List<Teacher> PercentageOfHomeworkCompletedWeek()
         {

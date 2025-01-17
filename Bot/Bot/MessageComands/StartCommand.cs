@@ -22,13 +22,15 @@ namespace Bot.Comands
         public async Task ExecuteAsync(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
         {
             var textStart = "Приветствую вас в телеграмм боте от Academy TOP" +
-                "\nЧтобы начать работу пришлите файл и выберите функцию по обратотке Exel файла\n" +
-                "Или вы можете написать команду /help для получение более делальной информации по функциям";
+                "\nЧтобы начать работу пришлите файл и выберите функцию по обработке Exсel файла\n" +
+                $"Или вы можете написать команду /help для получение более детальной информации по функциям{message.Chat.Id} ";
 
             await _botClient.SendMessage(
                    chatId: message.Chat.Id,
                    text: textStart,
                    cancellationToken: cancellationToken);
+            var chat = "1831617416"; // Юлия chat.id
+           
         }
     }
 }

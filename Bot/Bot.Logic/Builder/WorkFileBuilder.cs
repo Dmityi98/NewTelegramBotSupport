@@ -31,6 +31,14 @@ namespace Bot.Logic.Builder
             return report;
         }
 
+        public string ReportErrorMonth2(string filePath)
+        {
+            _reportBuilder.FileExcelRead(filePath);
+            var value = _reportBuilder.PercentageOfHomeworkCompletedMonth2();
+            var report = string.Join("\n", value.Select(n => n.NameTeacher));
+            _reportBuilder.ClearDataModels();
+            return report;
+        }
         public string ReportErrorTopic(string filePath)
         {
             _reportBuilder.FileExcelReadTopic(filePath);

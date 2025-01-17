@@ -22,9 +22,9 @@ namespace SupportBot
         private readonly ILogger<TelegramBotBackgroundService> _logger;
         private readonly CommandMessageHandler _commandMessageHandler;
         private readonly CommandCallbackHandler _commandCallbackHandler;
-        private readonly ReportBuilder _reportBuilder = new ReportBuilder();
-        public Dictionary<long, string> _filePaths = new();
         private readonly FileStorageService _fileStorage;
+        public Dictionary<long, string> _filePaths = new();
+        
 
         public TelegramBotBackgroundService(ILogger<TelegramBotBackgroundService> logger,
                                             IOptions<TelegramOptions> telegrtamOptions,
@@ -100,7 +100,7 @@ namespace SupportBot
                     InlineKeyboardButton.WithCallbackData("Данные по уроку", "topic")
                      ],
                 new [] {
-                    InlineKeyboardButton.WithCallbackData("Выданного дз", "date2"),
+                    InlineKeyboardButton.WithCallbackData("Выданного дз", "issued"),
                     InlineKeyboardButton.WithCallbackData("Посещаемости", "date4"),
                 },
                  new [] {

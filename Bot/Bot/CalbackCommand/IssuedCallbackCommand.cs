@@ -1,19 +1,20 @@
-﻿using Bot.Logic.Builder;
+﻿using Bot.Interface;
+using Bot.Logic.Builder;
 using Bot.Services;
-using Telegram.Bot.Types;
 using Telegram.Bot;
-using Bot.Interface;
+using Telegram.Bot.Types;
 
 namespace Bot.CalbackCommand
 {
-    public class TopicCallbackCommand : ICallbackCommand
+    public class IssuedCallbackCommand : ICallbackCommand
     {
+
         private readonly ITelegramBotClient _botClient;
         private readonly WorkFileBuilder _reportBuilder = new WorkFileBuilder();
         public Dictionary<long, string> _filePaths = new();
         private readonly FileStorageService _fileStorage;
 
-        public TopicCallbackCommand(ITelegramBotClient botClient, WorkFileBuilder workFileBuilder, FileStorageService fileStorage)
+        public IssuedCallbackCommand(ITelegramBotClient botClient, WorkFileBuilder workFileBuilder, FileStorageService fileStorage)
         {
             _botClient = botClient;
             _reportBuilder = workFileBuilder;
@@ -21,26 +22,27 @@ namespace Bot.CalbackCommand
         }
         public bool CanExecute(CallbackQuery callback)
         {
-            return callback.Data.Equals("topic", StringComparison.OrdinalIgnoreCase);
+            return callback.Data.Equals("issued", StringComparison.OrdinalIgnoreCase);
         }
-        public async Task ExecuteAsync(ITelegramBotClient botClient, CallbackQuery callback, CancellationToken cancellationToken)
+
+        async public Task ExecuteAsync(ITelegramBotClient botClient, CallbackQuery callback, CancellationToken cancellationToken)
         {
             if (callback.Message is not { } message)
                 return;
 
             await botClient.SendMessage(
                 chatId: message.Chat.Id,
-                text: "Идёт обработка файла и формирование отчёта...",
+                text: "Идёт обработка файла и формирование отчета...",
                 cancellationToken: cancellationToken);
             var filePath = _fileStorage.GetFilePath(message.Chat.Id);
 
             if (filePath is not null)
             {
-                var report = _reportBuilder.ReportErrorTopic(filePath);
+                var report = _reportBuilder.ReportErrorMonth2(filePath);
 
                 await botClient.SendMessage(
                     chatId: message.Chat.Id,
-                    text: $"У данных преподавателей Тема урока заполнено неправильно\n{report}\n",
+                    text: $"У данных преподователей процент выданного дз ученикам меньше 70% \n{report}\n",
                     cancellationToken: cancellationToken);
 
                 await botClient.SendMessage(
