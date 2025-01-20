@@ -101,7 +101,7 @@ namespace SupportBot
                      ],
                 new [] {
                     InlineKeyboardButton.WithCallbackData("Выданного дз", "issued"),
-                    InlineKeyboardButton.WithCallbackData("Посещаемости", "date4"),
+                    InlineKeyboardButton.WithCallbackData("Посещаемости", "attendance"),
                 },
                  new [] {
                     InlineKeyboardButton.WithCallbackData("Отчёт по студентам", "date5"),

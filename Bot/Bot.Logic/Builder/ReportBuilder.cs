@@ -11,14 +11,12 @@ namespace Bot.Logic.Builder
         public TeacherList TList = new TeacherList();
 
         public TopicList LessonTopics = new TopicList();
-        async public void FileExcelRead(string filePath)
+        public void FileExcelRead(string filePath)
         {
             Aspose.Cells.Workbook wb = new Aspose.Cells.Workbook(filePath);
 
-            // Получить все рабочие листы
             WorksheetCollection collection = wb.Worksheets;
 
-            // Перебрать все рабочие листы
             for (int worksheetIndex = 0; worksheetIndex < collection.Count; worksheetIndex++)
             {
 
@@ -49,52 +47,8 @@ namespace Bot.Logic.Builder
                 }
             }
         }
-        async public void FileExcelReadTopic(string filePath)
-        {
-            Aspose.Cells.Workbook wb = new Aspose.Cells.Workbook(filePath);
 
-            // Получить все рабочие листы
-            WorksheetCollection collection = wb.Worksheets;
-
-            // Перебрать все рабочие листы
-            for (int worksheetIndex = 0; worksheetIndex < collection.Count; worksheetIndex++)
-            {
-
-                // Получить рабочий лист, используя его индекс
-                Aspose.Cells.Worksheet worksheet = collection[worksheetIndex];
-
-                // Получить количество строк и столбцов
-                int rows = worksheet.Cells.MaxDataRow;
-                int cols = worksheet.Cells.MaxDataColumn;
-
-                for (int i = 2; i < rows; i++)
-                {
-                    var teacherTopic = new LessonTopic();
-                    teacherTopic.nameTeacher = worksheet.Cells[i, 4].Value.ToString();
-
-                    teacherTopic.Topic = Convert.ToString(worksheet.Cells[i, 5].Value);
-                    LessonTopics.LessonTopic.Add(teacherTopic);
-                }
-            }
-        }
-        public List<Teacher> PercentageOfHomeworkCompletedMonth() 
-        {
-            var list = new List<Teacher>();
-            foreach(var item in TList.TeachersList)
-            {
-                if ((item.ValueTeacher[2] == 0) || (item.ValueTeacher[3]) == 0)
-                {
-                    list.Add(item);
-                }
-                else if (((item.ValueTeacher[3] / item.ValueTeacher[2]) * 100) <= 75)
-                {
-                    list.Add(item);
-                }
-            }   
-            return list;  
-        }
-
-        public List<Teacher> PercentageOfHomeworkCompletedMonth2()
+        public List<Teacher> PercentageOfIssuaedCompletedMonth()
         {
             var list = new List<Teacher>();
             foreach (var item in TList.TeachersList)
@@ -105,10 +59,10 @@ namespace Bot.Logic.Builder
                 }
                 else if (((item.ValueTeacher[1] / item.ValueTeacher[4]) * 100) <= 70)
                 {
-                    
+
                     list.Add(item);
                 }
-                
+
             }
             return list;
         }
@@ -128,6 +82,90 @@ namespace Bot.Logic.Builder
             }
             return list;
         }
+        public void FileExcelReadTopic(string filePath)
+        {
+            Aspose.Cells.Workbook wb = new Aspose.Cells.Workbook(filePath);
+
+            
+            WorksheetCollection collection = wb.Worksheets;
+
+            for (int worksheetIndex = 0; worksheetIndex < collection.Count; worksheetIndex++)
+            {
+                Aspose.Cells.Worksheet worksheet = collection[worksheetIndex];
+
+                int rows = worksheet.Cells.MaxDataRow;
+                int cols = worksheet.Cells.MaxDataColumn;
+
+                for (int i = 2; i < rows; i++)
+                {
+                    var teacherTopic = new LessonTopic();
+                    teacherTopic.nameTeacher = worksheet.Cells[i, 4].Value.ToString();
+
+                    teacherTopic.Topic = Convert.ToString(worksheet.Cells[i, 5].Value);
+                    LessonTopics.LessonTopic.Add(teacherTopic);
+                }
+            }
+        }
+        public void FileExcelReadAttendance(string filePath)
+        {
+            Aspose.Cells.Workbook wb = new Aspose.Cells.Workbook(filePath);
+
+            WorksheetCollection collection = wb.Worksheets;
+
+            for (int worksheetIndex = 0; worksheetIndex < collection.Count; worksheetIndex++)
+            {
+                Aspose.Cells.Worksheet worksheet = collection[worksheetIndex];
+
+                int rows = worksheet.Cells.MaxDataRow;
+                int cols = worksheet.Cells.MaxDataColumn - 1 ;
+                
+                for (int i = 2; i < rows; i++)
+                {
+                    // Topic это строка а не число 
+                    var teacherTopic = new LessonTopic();
+                    teacherTopic.nameTeacher = worksheet.Cells[i, 0].Value.ToString();
+
+                    teacherTopic.Topic = Regex.Replace(worksheet.Cells[i, 4].Value.ToString(), "%", "");
+                    LessonTopics.LessonTopic.Add(teacherTopic);
+                }
+            }
+        }
+
+        public List<LessonTopic> ReturnTeacherAttendance()
+        {
+            var list = new List<LessonTopic>();
+
+            foreach (var item in LessonTopics.LessonTopic)
+            {
+                if (double.TryParse(item.Topic, out double attendanceValueDouble))
+                {
+                    int attendanceValue = (int)Math.Floor(attendanceValueDouble);
+                    if (attendanceValue < 65) 
+                    {
+                        list.Add(item);
+                    }
+                }
+            }
+            Console.WriteLine(list.Count);
+            return list;
+        }
+        public List<Teacher> PercentageOfHomeworkCompletedMonth() 
+        {
+            var list = new List<Teacher>();
+            foreach(var item in TList.TeachersList)
+            {
+                if ((item.ValueTeacher[2] == 0) || (item.ValueTeacher[3]) == 0)
+                {
+                    list.Add(item);
+                }
+                else if (((item.ValueTeacher[3] / item.ValueTeacher[2]) * 100) <= 75)
+                {
+                    list.Add(item);
+                }
+            }   
+            return list;  
+        }
+
         public List<LessonTopic> ReturnNameTopic()
         {
             var list = new List<LessonTopic>();

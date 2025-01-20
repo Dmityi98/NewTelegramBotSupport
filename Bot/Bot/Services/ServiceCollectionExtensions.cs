@@ -30,6 +30,7 @@ namespace Bot.Extensions
             services.AddSingleton<CommandMessageHandler>();
             services.AddSingleton<CommandCallbackHandler>();
             services.AddSingleton<IssuedCallbackCommand>();
+            services.AddSingleton<AttendanceCallbackCommand>();
             return services;
         }
         public static IServiceCollection AddBotCommands(this IServiceCollection services)
@@ -45,6 +46,7 @@ namespace Bot.Extensions
             services.AddScoped<ICallbackCommand, MonthCallbackCommand>();
             services.AddScoped<ICallbackCommand, TopicCallbackCommand>();
             services.AddScoped<ICallbackCommand, IssuedCallbackCommand>();
+            services.AddScoped<ICallbackCommand, AttendanceCallbackCommand>();
             return services;
         }
         public static IServiceCollection AddBotServices(this IServiceCollection services)

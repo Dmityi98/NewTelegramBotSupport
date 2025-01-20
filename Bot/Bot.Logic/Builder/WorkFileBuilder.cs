@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,11 +31,17 @@ namespace Bot.Logic.Builder
             var report = string.Join("\n", value.Select(n => n.NameTeacher));
             return report;
         }
-
+        public string ReportAttendence(string filePath)
+        {
+            _reportBuilder.FileExcelReadAttendance(filePath);
+            var value = _reportBuilder.ReturnTeacherAttendance();
+            var report = string.Join("\n", value.Select(n => n.nameTeacher));
+            return report;
+        }
         public string ReportErrorMonth2(string filePath)
         {
             _reportBuilder.FileExcelRead(filePath);
-            var value = _reportBuilder.PercentageOfHomeworkCompletedMonth2();
+            var value = _reportBuilder.PercentageOfIssuaedCompletedMonth();
             var report = string.Join("\n", value.Select(n => n.NameTeacher));
             _reportBuilder.ClearDataModels();
             return report;
