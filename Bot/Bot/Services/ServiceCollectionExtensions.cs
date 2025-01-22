@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using SupportBot;
 using SupportBot.Options;
@@ -10,6 +8,7 @@ using Bot.Comands;
 using Bot.CalbackCommand;
 using Bot.Logic.Builder;
 using Bot.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace Bot.Extensions
 {
@@ -31,6 +30,7 @@ namespace Bot.Extensions
             services.AddSingleton<CommandCallbackHandler>();
             services.AddSingleton<IssuedCallbackCommand>();
             services.AddSingleton<AttendanceCallbackCommand>();
+            services.AddSingleton<HomeworkCallbackCommand>();
             return services;
         }
         public static IServiceCollection AddBotCommands(this IServiceCollection services)
@@ -47,6 +47,7 @@ namespace Bot.Extensions
             services.AddScoped<ICallbackCommand, TopicCallbackCommand>();
             services.AddScoped<ICallbackCommand, IssuedCallbackCommand>();
             services.AddScoped<ICallbackCommand, AttendanceCallbackCommand>();
+            services.AddScoped<ICallbackCommand, HomeworkCallbackCommand>();
             return services;
         }
         public static IServiceCollection AddBotServices(this IServiceCollection services)

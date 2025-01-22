@@ -1,5 +1,8 @@
 using Bot.CalbackCommand;
 using Bot.Comands;
+using Bot.Core;
+using Bot.Core.Models.Task1;
+
 using Bot.Features;
 using Bot.Interface;
 using Bot.Logic.Builder;
@@ -24,6 +27,7 @@ namespace SupportBot
         private readonly CommandCallbackHandler _commandCallbackHandler;
         private readonly FileStorageService _fileStorage;
         public Dictionary<long, string> _filePaths = new();
+
         
 
         public TelegramBotBackgroundService(ILogger<TelegramBotBackgroundService> logger,
@@ -32,7 +36,8 @@ namespace SupportBot
                                             IServiceScopeFactory serviceScope,
                                             CommandMessageHandler commandHandler,
                                             CommandCallbackHandler commandCallbackHandler,
-                                            FileStorageService fileStorageService)
+                                            FileStorageService fileStorageService 
+                                            )
         {
             _logger = logger;
             _botClient = botClient;
@@ -40,6 +45,7 @@ namespace SupportBot
             _commandMessageHandler = commandHandler;
             _commandCallbackHandler = commandCallbackHandler;
             _fileStorage = fileStorageService;
+
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -96,7 +102,7 @@ namespace SupportBot
             InlineKeyboardMarkup inlineKeyboard = new(new[]
             {
                 [
-                    InlineKeyboardButton.WithCallbackData("Данные\nо проверенных работ", "read"),
+                    InlineKeyboardButton.WithCallbackData("Данные о проверенных работ", "read"),
                     InlineKeyboardButton.WithCallbackData("Данные по уроку", "topic")
                      ],
                 new [] {
@@ -104,17 +110,16 @@ namespace SupportBot
                     InlineKeyboardButton.WithCallbackData("Посещаемости", "attendance"),
                 },
                  new [] {
-                    InlineKeyboardButton.WithCallbackData("Отчёт по студентам", "date5"),
+                    InlineKeyboardButton.WithCallbackData("Отчёт по студентам", "homework"),
                     InlineKeyboardButton.WithCallbackData("Выполнение дз студентами", "date6")
                 },
             });
             var textStart = "Привет, я умный помощник для работы деканата\nВыбери функцию для начала.";
 
-            await _botClient.SendMessage(
-                chatId: message.Chat.Id,
-                text: textStart,
-                replyMarkup: inlineKeyboard,
-                cancellationToken: cancellationToken);
+            await botClient.SendMessage(message.Chat.Id,
+                  text: textStart,
+                  cancellationToken: cancellationToken,
+                  replyMarkup: inlineKeyboard);
         }
         
         private Task UnknownUpdateHendlerAsync(Update update, CancellationToken cancellationToken)

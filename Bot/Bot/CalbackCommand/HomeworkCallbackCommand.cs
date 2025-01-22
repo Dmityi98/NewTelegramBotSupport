@@ -6,41 +6,43 @@ using Telegram.Bot.Types;
 
 namespace Bot.CalbackCommand
 {
-    public class AttendanceCallbackCommand : ICallbackCommand
+    public class HomeworkCallbackCommand : ICallbackCommand
     {
         private readonly ITelegramBotClient _botClient;
-        private readonly WorkFileBuilder _reportBuilder = new WorkFileBuilder();
-        public Dictionary<long, string> _filePaths = new();
-        private readonly FileStorageService _fileStorage;
+        private readonly WorkFileBuilder _workFileBuilder;
+        private readonly FileStorageService _fileStorageService;
+        private Dictionary<long, string> _filePath;
 
-        public AttendanceCallbackCommand(ITelegramBotClient botClient, WorkFileBuilder workFileBuilder, FileStorageService fileStorage)
+        public HomeworkCallbackCommand(ITelegramBotClient botClient,
+                                       WorkFileBuilder workFileBuilder, 
+                                       FileStorageService fileStorageService)
         {
             _botClient = botClient;
-            _reportBuilder = workFileBuilder;
-            _fileStorage = fileStorage;
+            _workFileBuilder = workFileBuilder;
+            _fileStorageService = fileStorageService;
         }
         public bool CanExecute(CallbackQuery callback)
         {
-            return callback.Data.Equals("attendance", StringComparison.OrdinalIgnoreCase);
+            return callback.Data.Equals("homework", StringComparison.OrdinalIgnoreCase);
         }
+
         async public Task ExecuteAsync(ITelegramBotClient botClient, CallbackQuery callback, CancellationToken cancellationToken)
         {
             if (callback.Message is not { } message)
                 return;
-            
+
             await botClient.SendMessage(
                 chatId: message.Chat.Id,
                 text: "Идёт обработка файла и формирование отчета...",
                 cancellationToken: cancellationToken);
-            var filePath = _fileStorage.GetFilePath(message.Chat.Id);
+            var filePath = _fileStorageService.GetFilePath(message.Chat.Id);
 
             if (filePath is not null)
             {
-                var report = _reportBuilder.ReportAttendence(filePath);
-
+                var report= _workFileBuilder.reportErrorHomework(filePath);
                 await botClient.SendMessage(
                     chatId: message.Chat.Id,
-                    text: $"У данных преподователей процент посещаимости ниже 66% \n{report}\n",
+                    text: $"Дз у студентов \n{report}\n",
                     cancellationToken: cancellationToken);
 
                 await botClient.SendMessage(
@@ -57,6 +59,6 @@ namespace Bot.CalbackCommand
             }
             System.IO.File.Delete(filePath);
         }
-
+        }
     }
-}
+
