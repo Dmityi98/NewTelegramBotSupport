@@ -115,8 +115,11 @@ namespace Bot.Logic.Builder
 
                     var student = new Student();
                     student.NameStudent = worksheet.Cells[i, 0].Value.ToString();
-                    Console.WriteLine(student.Homework = int.Parse(worksheet.Cells[i, 15].Value.ToString()));
-
+                    student.Homework = int.Parse(worksheet.Cells[i, 15].Value.ToString());
+                    student.Classroom = int.Parse(worksheet.Cells[i, 16].Value.ToString());
+                    string attendance = worksheet.Cells[i, 16].Value.ToString();
+                    if (attendance.StartsWith("-") != true)
+                        student.Attendence = int.Parse(attendance);
                     StudentLists.Students.Add(student);
                 }
             }
@@ -196,7 +199,7 @@ namespace Bot.Logic.Builder
             var list = new List<Student>();
             foreach(var item in StudentLists.Students)
             {
-                if(item.Homework <=3)
+                if(item.Homework <=3 || item.Classroom <= 3 || item.Attendence <= 3 )
                 {
                     list.Add(item);
                 }

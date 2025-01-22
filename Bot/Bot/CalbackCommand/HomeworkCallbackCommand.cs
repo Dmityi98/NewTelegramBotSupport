@@ -11,7 +11,7 @@ namespace Bot.CalbackCommand
         private readonly ITelegramBotClient _botClient;
         private readonly WorkFileBuilder _workFileBuilder;
         private readonly FileStorageService _fileStorageService;
-        private Dictionary<long, string> _filePath;
+        private Dictionary<long, string> _filePath = new();
 
         public HomeworkCallbackCommand(ITelegramBotClient botClient,
                                        WorkFileBuilder workFileBuilder, 

@@ -58,7 +58,7 @@ namespace Bot.Logic.Builder
         {
             _reportBuilder.FileExcelReadHomework(filepath);
             var value = _reportBuilder.ReturnStudentHomework();
-            var report = string.Join("\n", value.Select(n => n.NameStudent).Distinct());
+            var report = string.Join("\n", value.Select(n => n.NameStudent));
             return report;
         }
     }

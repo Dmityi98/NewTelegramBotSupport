@@ -10,5 +10,8 @@ namespace Bot.Core.Models.Task_5
     {
         public string NameStudent { get; set; } = string.Empty;
         public int Homework { get; set; }
+        
+        public int Classroom { get; set; }
+        public int Attendence { get; set; }
     }
 }
