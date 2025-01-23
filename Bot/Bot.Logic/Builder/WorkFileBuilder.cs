@@ -11,10 +11,6 @@ namespace Bot.Logic.Builder
     {
         private ReportBuilder _reportBuilder = new ReportBuilder();
 
-        public void SetBuilder(ReportBuilder builder)
-        {
-            _reportBuilder = builder;
-        }
         public string ReportErrorMonth(string filePath)
         {
             _reportBuilder.FileExcelRead(filePath);
@@ -35,6 +31,7 @@ namespace Bot.Logic.Builder
         {
             _reportBuilder.FileExcelReadAttendance(filePath);
             var value = _reportBuilder.ReturnTeacherAttendance();
+            _reportBuilder.ClearDataModels();
             var report = string.Join("\n", value.Select(n => n.nameTeacher));
             return report;
         }
@@ -50,14 +47,23 @@ namespace Bot.Logic.Builder
         {
             _reportBuilder.FileExcelReadTopic(filePath);
             var value = _reportBuilder.ReturnNameTopic();
+            _reportBuilder.ClearDataModels();
             var report =  string.Join("\n", value.Select(n => n.nameTeacher).Distinct());
             return report;
         }
-
+        public string ReportErrorStudentHomework(string filePath)
+        {
+            _reportBuilder.FileExcelReadStudentHomework(filePath);
+            var value = _reportBuilder.ReportSutedentHomework();
+            _reportBuilder.ClearDataModels();
+            var report = string.Join("\n", value.Select(n => n.Name));
+            return report;
+        }
         public string reportErrorHomework(string filepath)
         {
             _reportBuilder.FileExcelReadHomework(filepath);
             var value = _reportBuilder.ReturnStudentHomework();
+            _reportBuilder.ClearDataModels();
             var report = string.Join("\n", value.Select(n => n.NameStudent));
             return report;
         }

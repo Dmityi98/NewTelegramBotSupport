@@ -2,6 +2,7 @@
 using Bot.Core.Models.Task_5;
 using Bot.Core.Models.Task1;
 using Bot.Core.Models.Task3;
+using Bot.Core.Models.Task6;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -13,6 +14,7 @@ namespace Bot.Logic.Builder
 
         public TopicList LessonTopics = new TopicList();
         public SrudentList StudentLists = new SrudentList();
+        public StudentLists StudentHomework= new StudentLists();
         public void FileExcelRead(string filePath)
         {
             Aspose.Cells.Workbook wb = new Aspose.Cells.Workbook(filePath);
@@ -96,7 +98,43 @@ namespace Bot.Logic.Builder
                 }
             }
         }
+        public void FileExcelReadStudentHomework(string filePath)
+        {
+            Aspose.Cells.Workbook wb = new Aspose.Cells.Workbook(filePath);
 
+            WorksheetCollection collection = wb.Worksheets;
+
+            for (int worksheetIndex = 0; worksheetIndex < collection.Count; worksheetIndex++)
+            {
+                Aspose.Cells.Worksheet worksheet = collection[worksheetIndex];
+
+                int rows = worksheet.Cells.MaxDataRow;
+                int cols = worksheet.Cells.MaxDataColumn - 1;
+
+                for (int i = 1; i < rows; i++)
+                {
+                    // Topic это строка а не число 
+                    var student = new StudentHomework();
+                    student.Name = worksheet.Cells[i, 0].Value.ToString();
+
+                    student.PercentageHomework = int.Parse(worksheet.Cells[i, 19].Value.ToString());
+                    StudentHomework.StudentsHomework.Add(student);
+                }
+            }
+        }
+        public List<StudentHomework> ReportSutedentHomework()
+        {
+            var list = new List<StudentHomework>();
+
+            foreach(var item in StudentHomework.StudentsHomework)
+            {
+                if(item.PercentageHomework <=50)
+                {
+                    list.Add(item);
+                }
+            }
+            return list;
+        }
         public void FileExcelReadHomework(string filePath)
         {
             Aspose.Cells.Workbook wb = new Aspose.Cells.Workbook(filePath);
@@ -224,6 +262,7 @@ namespace Bot.Logic.Builder
         {
             TList.TeachersList.Clear();
             LessonTopics.LessonTopic.Clear();
+            StudentHomework.StudentsHomework.Clear();
             StudentLists.Students.Clear();
         }
     }

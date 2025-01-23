@@ -31,6 +31,7 @@ namespace Bot.Extensions
             services.AddSingleton<IssuedCallbackCommand>();
             services.AddSingleton<AttendanceCallbackCommand>();
             services.AddSingleton<HomeworkCallbackCommand>();
+            services.AddScoped<StudentHomeworkCallbackCommand>();
             return services;
         }
         public static IServiceCollection AddBotCommands(this IServiceCollection services)
@@ -48,6 +49,7 @@ namespace Bot.Extensions
             services.AddScoped<ICallbackCommand, IssuedCallbackCommand>();
             services.AddScoped<ICallbackCommand, AttendanceCallbackCommand>();
             services.AddScoped<ICallbackCommand, HomeworkCallbackCommand>();
+            services.AddScoped<ICallbackCommand, StudentHomeworkCallbackCommand>();
             return services;
         }
         public static IServiceCollection AddBotServices(this IServiceCollection services)

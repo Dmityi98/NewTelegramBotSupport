@@ -111,7 +111,7 @@ namespace SupportBot
                 },
                  new [] {
                     InlineKeyboardButton.WithCallbackData("Отчёт по студентам", "homework"),
-                    InlineKeyboardButton.WithCallbackData("Выполнение дз студентами", "date6")
+                    InlineKeyboardButton.WithCallbackData("Выполнение дз студентами", "studenthomework")
                 },
             });
             var textStart = "Привет, я умный помощник для работы деканата\nВыбери функцию для начала.";
