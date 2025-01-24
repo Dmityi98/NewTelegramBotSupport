@@ -8,5 +8,6 @@ builder.Services.AddTelegramBotServices()
     .AddBotCallbackCommands()
     .AddBotServices()
     .AddBotOptions(builder);
+SQLitePCL.Batteries.Init();
 var host = builder.Build();
 host.Run();

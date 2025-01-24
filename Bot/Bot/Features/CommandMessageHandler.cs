@@ -20,7 +20,7 @@ namespace Bot.Features
             {
                 if (command.CanExecute(message))
                 {
-                    await command.ExecuteAsync(botClient, message, cancellationToken);
+                    await command.ExecuteAsync(message, cancellationToken);
                     return;
                 }
             }

@@ -9,7 +9,9 @@ namespace Bot.Logic.Builder
 {
     public class WorkFileBuilder
     {
-        private ReportBuilder _reportBuilder = new ReportBuilder();
+        private ReportBuilder _reportBuilder;
+        public WorkFileBuilder(ReportBuilder reportBuilder)
+            { _reportBuilder = reportBuilder; }
 
         public string ReportErrorMonth(string filePath)
         {
@@ -23,7 +25,7 @@ namespace Bot.Logic.Builder
         {
             _reportBuilder.FileExcelRead(filePath);
             var value = _reportBuilder.PercentageOfHomeworkCompletedWeek();
-            _reportBuilder.ClearDataModels();
+            Console.WriteLine(value.Count);
             var report = string.Join("\n", value.Select(n => n.NameTeacher));
             return report;
         }

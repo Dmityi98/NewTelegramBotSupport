@@ -9,6 +9,9 @@ using Bot.CalbackCommand;
 using Bot.Logic.Builder;
 using Bot.Services;
 using Microsoft.Extensions.Configuration;
+using Bot.Database;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Bot.Extensions
 {
@@ -19,6 +22,7 @@ namespace Bot.Extensions
             services.AddHostedService<TelegramBotBackgroundService>();
             services.AddTransient<ITelegramBotClient>(ServiceProvider =>
             {
+                var config = ServiceProvider.GetRequiredService<IConfiguration>();
                 var token = ServiceProvider.GetRequiredService<IOptions<TelegramOptions>>().Value.Token;
                 return new TelegramBotClient(token);
             });
@@ -56,11 +60,19 @@ namespace Bot.Extensions
         {
             services.AddSingleton<FileStorageService>();
             services.AddScoped<WorkFileBuilder>();
+            services.AddScoped<ReportBuilder>();
+            services.AddSingleton<SendMessageTeacher>();
             return services;
         }
         public static IServiceCollection AddBotOptions(this IServiceCollection services, HostApplicationBuilder builder)
         {
             services.Configure<TelegramOptions>(builder.Configuration.GetSection(TelegramOptions.Telegram));
+            builder.Services.AddScoped<DataService>();
+            builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+            builder.Services.AddDbContext<DbContextBot>(options =>
+            {
+                options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
             return services;
         }
     }

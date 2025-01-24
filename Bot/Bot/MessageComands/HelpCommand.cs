@@ -18,7 +18,7 @@ namespace Bot.Comands
             return message.Text.Equals("/help", StringComparison.OrdinalIgnoreCase);
         }
 
-        public async Task ExecuteAsync(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
+        public async Task ExecuteAsync( Message message, CancellationToken cancellationToken)
         {
 
             var textHelp = "Для начала работы вам нужно прислать файл Excel:\n" +

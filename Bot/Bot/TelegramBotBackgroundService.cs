@@ -2,13 +2,14 @@ using Bot.CalbackCommand;
 using Bot.Comands;
 using Bot.Core;
 using Bot.Core.Models.Task1;
-
+using Bot.Database;
 using Bot.Features;
 using Bot.Interface;
 using Bot.Logic.Builder;
 using Bot.Services;
 using Microsoft.Extensions.Options;
 using SupportBot.Options;
+using System;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
@@ -20,31 +21,31 @@ namespace SupportBot
     public class TelegramBotBackgroundService : BackgroundService
     {
         private readonly ITelegramBotClient _botClient;
-        private readonly IServiceScopeFactory _serviceScope;
+        private readonly DataService _teachersService;
         private static string _downloadPath = "downloaded_files";
         private readonly ILogger<TelegramBotBackgroundService> _logger;
         private readonly CommandMessageHandler _commandMessageHandler;
         private readonly CommandCallbackHandler _commandCallbackHandler;
         private readonly FileStorageService _fileStorage;
         public Dictionary<long, string> _filePaths = new();
+        
 
         
 
         public TelegramBotBackgroundService(ILogger<TelegramBotBackgroundService> logger,
                                             IOptions<TelegramOptions> telegrtamOptions,
                                             ITelegramBotClient botClient,
-                                            IServiceScopeFactory serviceScope,
                                             CommandMessageHandler commandHandler,
                                             CommandCallbackHandler commandCallbackHandler,
-                                            FileStorageService fileStorageService 
-                                            )
+                                            FileStorageService fileStorageService,
+                                            DataService teachersService)
         {
             _logger = logger;
             _botClient = botClient;
-            _serviceScope = serviceScope;
             _commandMessageHandler = commandHandler;
             _commandCallbackHandler = commandCallbackHandler;
             _fileStorage = fileStorageService;
+            _teachersService = teachersService;
 
         }
 
@@ -120,6 +121,8 @@ namespace SupportBot
                   text: textStart,
                   cancellationToken: cancellationToken,
                   replyMarkup: inlineKeyboard);
+           
+            
         }
         
         private Task UnknownUpdateHendlerAsync(Update update, CancellationToken cancellationToken)

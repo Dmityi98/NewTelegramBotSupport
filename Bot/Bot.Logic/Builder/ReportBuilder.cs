@@ -4,6 +4,7 @@ using Bot.Core.Models.Task1;
 using Bot.Core.Models.Task3;
 using Bot.Core.Models.Task6;
 using System.Collections.Generic;
+using Bot;
 using System.Text.RegularExpressions;
 
 namespace Bot.Logic.Builder
@@ -11,7 +12,6 @@ namespace Bot.Logic.Builder
     public class ReportBuilder : IReportBuilderInterface
     {
         public TeacherList TList = new TeacherList();
-
         public TopicList LessonTopics = new TopicList();
         public SrudentList StudentLists = new SrudentList();
         public StudentLists StudentHomework= new StudentLists();
@@ -89,7 +89,6 @@ namespace Bot.Logic.Builder
 
                 for (int i = 2; i < rows; i++)
                 {
-                    // Topic это строка а не число 
                     var teacherTopic = new LessonTopic();
                     teacherTopic.nameTeacher = worksheet.Cells[i, 0].Value.ToString();
 
@@ -113,7 +112,7 @@ namespace Bot.Logic.Builder
 
                 for (int i = 1; i < rows; i++)
                 {
-                    // Topic это строка а не число 
+           
                     var student = new StudentHomework();
                     student.Name = worksheet.Cells[i, 0].Value.ToString();
 

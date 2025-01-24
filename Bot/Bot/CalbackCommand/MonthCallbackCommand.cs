@@ -10,7 +10,7 @@ namespace Bot.CalbackCommand
     {
 
         private readonly ITelegramBotClient _botClient;
-        private readonly WorkFileBuilder _reportBuilder = new WorkFileBuilder();
+        private readonly WorkFileBuilder _reportBuilder;
         public Dictionary<long, string> _filePaths = new();
         private readonly FileStorageService _fileStorage;
 
