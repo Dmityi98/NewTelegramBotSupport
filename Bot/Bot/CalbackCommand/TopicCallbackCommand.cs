@@ -12,12 +12,14 @@ namespace Bot.CalbackCommand
         private readonly WorkFileBuilder _reportBuilder;
         public Dictionary<long, string> _filePaths = new();
         private readonly FileStorageService _fileStorage;
+        private readonly SendMessageTeacher _sendMessageTeacher;
 
-        public TopicCallbackCommand(ITelegramBotClient botClient, WorkFileBuilder workFileBuilder, FileStorageService fileStorage)
+        public TopicCallbackCommand(ITelegramBotClient botClient, WorkFileBuilder workFileBuilder, FileStorageService fileStorage, SendMessageTeacher sendMessageTeacher)
         {
             _botClient = botClient;
             _reportBuilder = workFileBuilder;
             _fileStorage = fileStorage;
+            _sendMessageTeacher = sendMessageTeacher;
         }
         public bool CanExecute(CallbackQuery callback)
         {
@@ -37,7 +39,7 @@ namespace Bot.CalbackCommand
             if (filePath is not null)
             {
                 var report = _reportBuilder.ReportErrorTopic(filePath);
-
+                await _sendMessageTeacher.SendMessageTeachers("тема урока заполнено неправильно");
                 await botClient.SendMessage(
                     chatId: message.Chat.Id,
                     text: $"У данных преподавателей Тема урока заполнено неправильно\n{report}\n",

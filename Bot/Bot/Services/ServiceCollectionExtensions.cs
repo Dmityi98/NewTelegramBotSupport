@@ -8,10 +8,8 @@ using Bot.Comands;
 using Bot.CalbackCommand;
 using Bot.Logic.Builder;
 using Bot.Services;
-using Microsoft.Extensions.Configuration;
 using Bot.Database;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace Bot.Extensions
 {

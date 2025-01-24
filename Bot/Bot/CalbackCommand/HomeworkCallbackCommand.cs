@@ -39,10 +39,10 @@ namespace Bot.CalbackCommand
 
             if (filePath is not null)
             {
-                var report= _workFileBuilder.reportErrorHomework(filePath);
+                var report= _workFileBuilder.ReportErrorStudendAverage(filePath);
                 await botClient.SendMessage(
                     chatId: message.Chat.Id,
-                    text: $"Дз у студентов \n{report}\n",
+                    text: $"Дз у студентов процент выполнения дз меньше 50% \n{report}\n",
                     cancellationToken: cancellationToken);
 
                 await botClient.SendMessage(

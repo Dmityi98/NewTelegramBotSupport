@@ -1,5 +1,4 @@
-﻿using System.Windows.Input;
-using Telegram.Bot.Types;
+﻿using Telegram.Bot.Types;
 using Telegram.Bot;
 using Bot.Interface;
 

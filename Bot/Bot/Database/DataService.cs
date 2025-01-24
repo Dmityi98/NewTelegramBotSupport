@@ -1,8 +1,5 @@
-﻿
-using Bot.Core;
-using Bot.Core.Models.Task1;
+﻿using Bot.Core;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
 
 namespace Bot.Database
 {

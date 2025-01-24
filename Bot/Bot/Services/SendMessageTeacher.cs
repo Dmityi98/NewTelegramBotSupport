@@ -1,6 +1,5 @@
 ﻿using Bot.Database;
 using Bot.Logic.Builder;
-using Microsoft.EntityFrameworkCore.Internal;
 using Telegram.Bot;
 
 namespace Bot.Services

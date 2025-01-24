@@ -13,12 +13,14 @@ namespace Bot.CalbackCommand
         private readonly WorkFileBuilder _reportBuilder;
         public Dictionary<long, string> _filePaths = new();
         private readonly FileStorageService _fileStorage;
+        private readonly SendMessageTeacher _sendMessageTeacher;
 
-        public MonthCallbackCommand(ITelegramBotClient botClient, WorkFileBuilder workFileBuilder, FileStorageService fileStorage)
+        public MonthCallbackCommand(ITelegramBotClient botClient, WorkFileBuilder workFileBuilder, FileStorageService fileStorage, SendMessageTeacher sendMessageTeacher)
         {
             _botClient = botClient;
             _reportBuilder = workFileBuilder;
             _fileStorage = fileStorage;
+            _sendMessageTeacher = sendMessageTeacher;
         }
         public bool CanExecute(CallbackQuery callback)
         {
@@ -39,7 +41,7 @@ namespace Bot.CalbackCommand
             if (filePath is not null)
             {
                 var report = _reportBuilder.ReportErrorMonth(filePath);
-
+                await _sendMessageTeacher.SendMessageTeachers(" у вас проверка дз меньше 75% за этот месяц");
                 await botClient.SendMessage(
                     chatId: message.Chat.Id,
                     text: $"У данных преподователей проверка дз меньше 75% за этот месяц\n{report}\n",

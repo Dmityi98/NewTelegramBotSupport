@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Bot.Logic.Builder
+﻿namespace Bot.Logic.Builder
 {
     public class WorkFileBuilder
     {
@@ -37,7 +30,7 @@ namespace Bot.Logic.Builder
             var report = string.Join("\n", value.Select(n => n.nameTeacher));
             return report;
         }
-        public string ReportErrorMonth2(string filePath)
+        public string ReportErrorIssuaedCompletedMonth(string filePath)
         {
             _reportBuilder.FileExcelRead(filePath);
             var value = _reportBuilder.PercentageOfIssuaedCompletedMonth();
@@ -61,10 +54,10 @@ namespace Bot.Logic.Builder
             var report = string.Join("\n", value.Select(n => n.Name));
             return report;
         }
-        public string reportErrorHomework(string filepath)
+        public string ReportErrorStudendAverage(string filepath)
         {
             _reportBuilder.FileExcelReadHomework(filepath);
-            var value = _reportBuilder.ReturnStudentHomework();
+            var value = _reportBuilder.ReturnStudentАverageScore();
             _reportBuilder.ClearDataModels();
             var report = string.Join("\n", value.Select(n => n.NameStudent));
             return report;

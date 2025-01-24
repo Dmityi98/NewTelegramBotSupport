@@ -1,15 +1,8 @@
-using Bot.CalbackCommand;
-using Bot.Comands;
-using Bot.Core;
-using Bot.Core.Models.Task1;
 using Bot.Database;
 using Bot.Features;
-using Bot.Interface;
-using Bot.Logic.Builder;
 using Bot.Services;
 using Microsoft.Extensions.Options;
 using SupportBot.Options;
-using System;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
@@ -28,9 +21,6 @@ namespace SupportBot
         private readonly CommandCallbackHandler _commandCallbackHandler;
         private readonly FileStorageService _fileStorage;
         public Dictionary<long, string> _filePaths = new();
-        
-
-        
 
         public TelegramBotBackgroundService(ILogger<TelegramBotBackgroundService> logger,
                                             IOptions<TelegramOptions> telegrtamOptions,
@@ -46,17 +36,13 @@ namespace SupportBot
             _commandCallbackHandler = commandCallbackHandler;
             _fileStorage = fileStorageService;
             _teachersService = teachersService;
-
         }
-
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            
             ReceiverOptions receiverOptions = new()
             {
                 AllowedUpdates = []
             };
-
 
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -69,8 +55,7 @@ namespace SupportBot
 
         }
         private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
-        {
-
+        { 
             var hendler = update switch
             {
                 { Message: { } message } when message.Document != null => HandleDocumentAsync(botClient, message, cancellationToken),
@@ -80,13 +65,12 @@ namespace SupportBot
             };
             await hendler;
         }
-
         public async Task HandleDocumentAsync(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
         {
             Directory.CreateDirectory(_downloadPath);
             if (message.Document is null)
                 return;
-
+            
             var chatId = message.Chat.Id;
 
             var fileInfo = await botClient.GetFile(message.Document.FileId, cancellationToken);
@@ -121,10 +105,7 @@ namespace SupportBot
                   text: textStart,
                   cancellationToken: cancellationToken,
                   replyMarkup: inlineKeyboard);
-           
-            
-        }
-        
+        }  
         private Task UnknownUpdateHendlerAsync(Update update, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Unknown message");
